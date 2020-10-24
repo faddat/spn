@@ -1,6 +1,7 @@
-# spn
+# Starport Network
 
-**spn** is a blockchain application built using Cosmos SDK and Tendermint and generated with [Starport](https://github.com/tendermint/starport).
+**spn** is a blockchain application that facilitates coordination of genesis state, formation of validator sets, and upgrades of blockchain applications.
+
 
 ## Get started
 
