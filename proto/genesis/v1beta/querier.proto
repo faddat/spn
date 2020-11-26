@@ -1,0 +1,77 @@
+syntax = "proto3";
+package spn.genesis.v1beta1;
+
+option go_package = "github.com/tendermint/spn/x/genesis/types";
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "genesis/v1beta/types.proto";
+
+// Query defines the gRPC querier service.
+service Query {
+    rpc ListChains(QueryListChainsRequest) returns (QueryListChainsResponse);
+    rpc ShowChain(QueryShowChainRequest) returns (QueryShowChainResponse);
+    rpc PendingProposals(QueryPendingProposalsRequest) returns (QueryPendingProposalsResponse);
+    rpc ApprovedProposals(QueryApprovedProposalsRequest) returns (QueryApprovedProposalsResponse);
+    rpc RejectedProposals(QueryRejectedProposalsRequest) returns (QueryRejectedProposalsResponse);
+    rpc ShowProposal(QueryShowProposalRequest) returns (QueryShowProposalResponse);
+    rpc CurrentGenesis(QueryCurrentGenesisRequest) returns (QueryCurrentGenesisResponse);
+}
+
+message QueryListChainsRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryListChainsResponse {
+	  cosmos.base.query.v1beta1.PageResponse pagination = 1;
+	  repeated string chainIDs = 2;
+}
+
+message QueryShowChainRequest {
+	  string chainID = 1;
+}
+
+message QueryShowChainResponse {
+	  Chain chain = 1;
+}
+
+message QueryPendingProposalsRequest {
+    string chainID = 1;
+}
+
+message QueryPendingProposalsResponse {
+    repeated Proposal proposals = 1;
+}
+
+message QueryApprovedProposalsRequest {
+  string chainID = 1;
+}
+
+message QueryApprovedProposalsResponse {
+  repeated Proposal proposals = 1;
+}
+
+message QueryRejectedProposalsRequest {
+  string chainID = 1;
+}
+
+message QueryRejectedProposalsResponse {
+  repeated Proposal proposals = 1;
+}
+
+message QueryShowProposalRequest {
+	  string chainID = 1;
+    int32 proposalID = 2;
+}
+
+message QueryShowProposalResponse {
+	  Proposal proposal = 1;
+}
+
+message QueryCurrentGenesisRequest {
+    string chainID = 1;
+}
+
+message QueryCurrentGenesisResponse {
+    bytes genesis = 1;
+}
+

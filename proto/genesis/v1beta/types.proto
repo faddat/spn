@@ -1,0 +1,65 @@
+syntax = "proto3";
+package spn.genesis.v1beta1;
+
+option go_package = "github.com/tendermint/spn/x/genesis/types";
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/tx/v1beta1/tx.proto";
+import "gogoproto/gogo.proto";
+
+message Chain {
+  string chainID = 1;
+  string creator = 2;
+  repeated string peers = 3; 
+  string sourceURL = 4; 
+  string sourceHash  = 5; 
+  int64 createdAt = 6;
+  bytes genesis = 7 [(gogoproto.casttype) = "GenesisFile"];
+  bool final = 8;
+}
+
+message Proposal {
+    ProposalInformation proposalInformation = 1;
+    ProposalState proposalState = 2;
+    oneof payload {
+        ProposalChangePayload changePayload = 3;
+        ProposalAddAccountPayload addAccountPayload = 4;
+        ProposalAddValidatorPayload addValidatorPayload = 5;
+    }
+}
+
+message ProposalInformation {
+    string chainID = 1;
+    int32 proposalID = 2;
+    string creator = 3;
+    int64 createdAt = 4;
+    
+}
+
+message ProposalState {
+    enum Status {
+        APPROVED = 0;
+        REJECTED = 1;
+        PENDING = 2;
+    }
+    Status status = 1;
+}
+
+message ProposalList {
+    repeated int32 proposalIDs = 1;
+}
+
+message ProposalChangePayload {
+    repeated string changePath = 1;
+    string newValue = 2;
+}
+
+message ProposalAddAccountPayload {
+    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    repeated cosmos.base.v1beta1.Coin coins = 2 [(gogoproto.nullable) = false, (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.Coin", (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
+message ProposalAddValidatorPayload {
+    cosmos.tx.v1beta1.Tx genTx = 1;
+    string peer = 2;
+}

@@ -1,26 +1,33 @@
 package rest
 
 import (
+	"fmt"
+
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	// this line is used by starport scaffolding # 1
 )
 
 const (
-    MethodGet = "GET"
+	MethodGet  = "GET"
+	MethodPost = "POST"
 )
 
 // RegisterRoutes registers chat-related REST handlers to a router
 func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
-	// this line is used by starport scaffolding # 2
+	registerQueryRoutes(clientCtx, r)
+	registerTxHandlers(clientCtx, r)
 }
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
-	// this line is used by starport scaffolding # 3
+	r.HandleFunc("/chat/channel/{channel_id}", showChannelHandler(clientCtx)).Methods(MethodGet)
+	r.HandleFunc("/chat/channels", listChannelsHandler(clientCtx)).Methods(MethodGet)
+	r.HandleFunc("/chat/list_messages/{channel_id}", listMessagesHandler(clientCtx)).Methods(MethodGet)
+	r.HandleFunc("/chat/search_messages/{tag}/{channel_id}", searchMessagesHandler(clientCtx)).Methods(MethodGet)
 }
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
-	// this line is used by starport scaffolding # 4
+	r.HandleFunc(fmt.Sprintf("/chat/create_channel"), createChannelHandler(clientCtx)).Methods(MethodPost)
+	r.HandleFunc(fmt.Sprintf("/chat/send_message"), sendMessageHandler(clientCtx)).Methods(MethodPost)
+	r.HandleFunc(fmt.Sprintf("/chat/vote_poll"), votePollHandler(clientCtx)).Methods(MethodPost)
 }
-
