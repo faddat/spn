@@ -1,4 +1,4 @@
-FROM faddat/sos
+FROM faddat/sos-full
 
 # fetch spn.  Might want to use copy later, but this should only build with changes to master.
 RUN pacman -Syyu --noconfirm go && \
